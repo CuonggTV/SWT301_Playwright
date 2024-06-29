@@ -1,21 +1,40 @@
 import { test, expect } from '@playwright/test';
 import ExcelUtils from './utils/excel';
+import BannerXpath from './xpath/banner.xpath';
+import LoginXpath from './xpath/login.xpath';
+import TestConfig from './test-config';
+import SearchResultXpath from './xpath/search-result.xpath';
+import BuyItemXpath from './xpath/buy-item.xpath';
+import CartXpath from './xpath/cart.spect';
 
-test('test', async ({ page }) => {
-  const accounts = ExcelUtils.readExcelFile('login.xlsx');
-  for(const account of accounts){
-    await page.goto('https://memoryzone.com.vn/');
-    await page.getByRole('banner').getByRole('link', { name: 'Đăng nhập' }).click();
-    await page.getByRole('textbox', { name: 'Email', exact: true }).click();
-    await page.getByRole('textbox', { name: 'Email', exact: true }).fill('rinjin2004@gmail.com');
-    await page.getByPlaceholder('Mật khẩu').click();
-    await page.getByPlaceholder('Mật khẩu').fill('rinjin1412');
-    await page.getByRole('button', { name: 'Đăng nhập' }).click();
-    await page.getByPlaceholder('Bạn cần tìm gì?').click();
-    await page.getByRole('link', { name: 'ssd', exact: true }).click();
-    await page.getByRole('link', { name: 'SSD Lexar NS100 512GB 2.5-' }).click();
-    await page.getByRole('button', { name: 'THÊM VÀO GIỎ', exact: true }).click();
-    await page.getByRole('link', { name: 'Xem giỏ hàng' }).click();
-  }
+test('login', async ({ page }) => {
+
+  await page.goto('/');
+  await page.locator(BannerXpath.LOGIN_URL).click();
+
+  // 1. Enter email
+  await page.locator(LoginXpath.EMAIL).click();
+  await page.locator(LoginXpath.EMAIL).fill(TestConfig.DEFAULT_EMAIL);
+
+  // 3. Enter password
+  await page.locator(LoginXpath.PASSWORD).click();
+  await page.locator(LoginXpath.PASSWORD).fill(TestConfig.DEFAULT_PASSWORD);
+
+  // 4. Submit
+  await page.locator(LoginXpath.SUBMIT_BUTTON).click();
+
+  // 5. Search first item 
+  await page.locator(BannerXpath.SEARCH).click();
+  await page.locator(BannerXpath.SEARCH).fill('ram');
+  await page.locator(SearchResultXpath.FIRST_ITEM).click();
+
+  // 6. Add to cart
+  await page.locator(BuyItemXpath.ADD_TO_CART).click();
+
+  // 7. View in cart
+  await page.locator(BannerXpath.CART).click();
+
+  // Result
+  await expect(page.locator(CartXpath.CHECK_OUT)).toBeVisible()
 
 });

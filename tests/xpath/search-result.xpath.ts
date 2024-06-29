@@ -1,7 +1,3 @@
 export default class SearchResultXpath {
-    static readonly EMAIL = '*[@id="customer_email"]'
-    
-    static readonly PASSWORD = '*[@id="customer_password"]'
-
-    static readonly SUBMIT = '*[@id="customer_login"]/div[2]/div/button'
+    static readonly FIRST_ITEM = '//*[@id="template-search"]/section[2]/div/ae-widget/div/ul/li[1]/div/div[2]/h3/a'
 }
